@@ -95,8 +95,8 @@ loop(Req) ->
     end.
 
 handlers() ->
-    [{['GET', "/healthcheck"], fun(Req, _Match, _Status) ->
-        authorize(Req),
+    [{['GET', "/healthcheck"], fun(_Req, _Match, _Status) ->
+        %% authorize(Req),
 
         RegisteredMods = [logplex_realtime, logplex_stats, logplex_tail, logplex_shard, tcp_acceptor],
         [(whereis(Name) == undefined orelse not is_process_alive(whereis(Name))) andalso throw({500, io_lib:format("Process dead: ~p", [Name])}) || Name <- RegisteredMods],
@@ -745,4 +745,3 @@ set_status(Term) ->
     end,
     logplex_app:set_config(api_status, Term),
     Old.
-
